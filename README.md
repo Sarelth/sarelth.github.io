@@ -1,2 +1,1758 @@
-# sarelth.github.io
-Test Page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Downtime & Dating Helper</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: dark light;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #111;
+      color: #eee;
+    }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 0.75rem 1rem;
+      background: #222;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    header small {
+      opacity: 0.7;
+      font-size: 0.8rem;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    .panel {
+      background: #191919;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 0.75rem;
+      box-sizing: border-box;
+    }
+
+    .panel h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.95rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 0.25rem;
+    }
+
+    .left-panel {
+      flex: 1 1 280px;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .right-panel {
+      flex: 2 1 360px;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+      align-items: center;
+    }
+
+    label {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      min-width: 70px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.3rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background: #111;
+      color: #eee;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+
+    textarea {
+      min-height: 2.7rem;
+      resize: vertical;
+    }
+
+    .small {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #2c2c2c;
+      color: #eee;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    button.primary {
+      background: #375a9e;
+      border-color: #4a7ad9;
+    }
+
+    button.danger {
+      background: #702626;
+      border-color: #a33a3a;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    ul#activityList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 180px;
+      overflow-y: auto;
+      border: 1px solid #333;
+      border-radius: 4px;
+      background: #121212;
+    }
+
+    #activityList li {
+      padding: 0.25rem 0.4rem;
+      font-size: 0.8rem;
+      border-bottom: 1px solid #222;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #activityList li:last-child {
+      border-bottom: none;
+    }
+
+    #activityList li span.name {
+      font-weight: 500;
+    }
+
+    #activityList li span.category {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-left: 0.5rem;
+    }
+
+    #activityList li.active {
+      background: #283049;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.05rem 0.3rem;
+      border-radius: 999px;
+      border: 1px solid #555;
+      font-size: 0.7rem;
+      opacity: 0.9;
+      margin-left: 0.35rem;
+    }
+
+    .run-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .outcome-box {
+      border-radius: 4px;
+      border: 1px solid #444;
+      background: #111;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      min-height: 4rem;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+    }
+
+    .outcome-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+      opacity: 0.9;
+    }
+
+    .tag-success {
+      color: #8fdf8f;
+    }
+
+    .tag-failure {
+      color: #ff8f8f;
+    }
+
+    details.import-export {
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #333;
+      padding: 0.4rem 0.5rem;
+      background: #131313;
+    }
+
+    details.import-export summary {
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      outline: none;
+    }
+
+    #jsonArea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 0.4rem;
+      min-height: 5rem;
+      font-size: 0.75rem;
+    }
+
+    .subheading {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin: 0.4rem 0 0.1rem 0;
+      border-top: 1px solid #333;
+      padding-top: 0.25rem;
+    }
+
+    details.debug-panel {
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #333;
+      padding: 0.4rem 0.5rem;
+      background: #181818;
+    }
+
+    details.debug-panel summary {
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      outline: none;
+    }
+
+    footer {
+      padding: 0.4rem 0.7rem;
+      font-size: 0.7rem;
+      opacity: 0.7;
+      background: #151515;
+      border-top: 1px solid #333;
+      text-align: right;
+    }
+
+    @media (max-width: 800px) {
+      .content {
+        flex-direction: column;
+      }
+      .left-panel,
+      .right-panel {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>Downtime & Dating Helper</h1>
+      <small>Define downtime actions, roll single checks or 5-roll challenges (with advantage).</small>
+    </div>
+    <div class="small">
+      Data is stored locally in your browser (no server).
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- LEFT: Activities & Editor -->
+    <div class="left-panel">
+      <div class="panel">
+        <h2>Activities</h2>
+
+        <div class="row">
+          <label for="sortModeSelect">Sort</label>
+          <select id="sortModeSelect">
+            <option value="name">Name (A–Z)</option>
+            <option value="category">Category → Name</option>
+            <option value="created">Creation Order</option>
+          </select>
+        </div>
+
+        <ul id="activityList"></ul>
+        <div class="btn-row">
+          <button id="newActivityBtn">New</button>
+          <button id="deleteActivityBtn" class="danger" disabled>Delete</button>
+          <button id="restoreDefaultsBtn">Restore Defaults</button>
+        </div>
+        <p class="small" style="margin-top:0.3rem;">
+          Tip: Click an activity above to edit it. “Restore Defaults” re-adds any missing built-in actions.
+        </p>
+      </div>
+
+      <div class="panel">
+        <h2>Edit Activity</h2>
+        <form id="activityForm">
+          <input type="hidden" id="activityId" />
+          <div class="row">
+            <label for="activityName">Name</label>
+            <input type="text" id="activityName" placeholder="e.g., Craft Item, Research Lore" required />
+          </div>
+          <div class="row">
+            <label for="activityCategory">Category</label>
+            <input type="text" id="activityCategory" placeholder="e.g., Crafting, Social, Training" />
+          </div>
+          <div class="row">
+            <label for="activityDC">DC</label>
+            <input type="number" id="activityDC" placeholder="e.g., 15" />
+          </div>
+          <div class="row">
+            <label for="activityAbility">Check</label>
+            <input type="text" id="activityAbility" placeholder="e.g., Int (Arcana), Wis (Insight)" />
+          </div>
+          <div class="row">
+            <label for="activitySuccess">Success</label>
+            <textarea id="activitySuccess" placeholder="What happens on success?"></textarea>
+          </div>
+          <div class="row">
+            <label for="activityFailure">Failure</label>
+            <textarea id="activityFailure" placeholder="What happens on failure?"></textarea>
+          </div>
+          <div class="row">
+            <label for="activityCritSuccess">Crit&nbsp;Success</label>
+            <textarea id="activityCritSuccess" placeholder="Optional: outcome for a nat 20 (single check)."></textarea>
+          </div>
+          <div class="row">
+            <label for="activityCritFailure">Crit&nbsp;Failure</label>
+            <textarea id="activityCritFailure" placeholder="Optional: outcome for a nat 1 (single check)."></textarea>
+          </div>
+
+          <p class="subheading">
+            5-Roll Challenge Outcomes (optional, used when the checkbox is enabled)
+          </p>
+          <div class="row">
+            <label for="activityTier0">0&nbsp;Succ</label>
+            <textarea id="activityTier0" placeholder="Critical Failure: only negative outcome; a resource/lead is lost or destroyed."></textarea>
+          </div>
+          <div class="row">
+            <label for="activityTier1">1&nbsp;Succ</label>
+            <textarea id="activityTier1" placeholder="Failure: you failed, expect repercussions."></textarea>
+          </div>
+          <div class="row">
+            <label for="activityTier2">2&nbsp;Succ</label>
+            <textarea id="activityTier2" placeholder="Bad Success: success with a significant complication or cost."></textarea>
+          </div>
+          <div class="row">
+            <label for="activityTier3">3&nbsp;Succ</label>
+            <textarea id="activityTier3" placeholder="Standard Success: solid, expected success."></textarea>
+          </div>
+          <div class="row">
+            <label for="activityTier4">4&nbsp;Succ</label>
+            <textarea id="activityTier4" placeholder="Success Plus: success with a useful extra, clue, or hint."></textarea>
+          </div>
+          <div class="row">
+            <label for="activityTier5">5&nbsp;Succ</label>
+            <textarea id="activityTier5" placeholder="Critical Success: big win with extra benefits/boons."></textarea>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="primary" id="saveActivityBtn">Save Activity</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT: Run Activity & Results -->
+    <div class="right-panel">
+      <div class="panel run-panel">
+        <h2>Run Activity</h2>
+
+        <div class="row">
+          <label for="characterName">Character</label>
+          <input type="text" id="characterName" placeholder="Optional: Character name" />
+        </div>
+        <div class="row">
+          <label for="characterBonus">Total Bonus</label>
+          <input type="number" id="characterBonus" placeholder="All modifiers: ability + prof + items + Guidance, etc." />
+        </div>
+
+        <div class="row">
+          <label for="activitySelect">Activity</label>
+          <select id="activitySelect"></select>
+        </div>
+
+        <div class="row">
+          <label>Mode</label>
+          <div class="small">
+            <input type="checkbox" id="useFivePoint" />
+            <label for="useFivePoint" style="opacity:0.9;">Use 5-Roll Challenge (5 checks vs DC)</label><br/>
+            <span class="small">Unchecked = single check (classic). Checked = 5 checks; outcomes by # of successes.</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <label>Roll Type</label>
+          <div class="small">
+            <label><input type="radio" name="rollMode" value="normal" checked /> Normal</label>
+            <label><input type="radio" name="rollMode" value="adv" /> Adv.</label>
+            <label><input type="radio" name="rollMode" value="dis" /> Dis.</label>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="rollButton" class="primary">Roll &amp; Resolve</button>
+        </div>
+
+        <div class="outcome-box" id="outcomeDisplay">
+          <span class="small">No roll yet. Choose an activity, pick mode, then click “Roll &amp; Resolve”.</span>
+        </div>
+
+        <div class="row">
+          <label for="runNotes">Notes</label>
+          <textarea id="runNotes" placeholder="Write what actually happened: Opinion changes, contacts gained, clues, complications. Copy this into your session log."></textarea>
+        </div>
+
+        <p class="small">
+          Single check:
+          Roll 1d20 (+ bonus), apply advantage/disadvantage if set, compare to DC, and use crit texts on natural 1/20 if defined.
+          <br/>
+          5-Roll Challenge:
+          Roll 5× (d20 + bonus) vs DC, count successes (0–5), then use the matching tier text if present.
+        </p>
+      </div>
+
+      <details class="import-export">
+        <summary>Import / Export JSON (advanced)</summary>
+        <p class="small">
+          Use this to bulk-edit your activities. Click <b>Export</b> to copy, tweak the JSON, then
+          <b>Import</b> to load it back. This will <b>add</b> to your existing list, not replace it.
+        </p>
+        <textarea id="jsonArea" placeholder='[ { "name": "Example", "dc": 15, ... } ]'></textarea>
+        <div class="btn-row">
+          <button id="exportBtn">Export</button>
+          <button id="importBtn">Import</button>
+        </div>
+      </details>
+
+      <details class="debug-panel">
+        <summary>Debug Info</summary>
+        <div id="debugInfo" class="small" style="margin-top:0.4rem;">
+          (debug not initialized yet)
+        </div>
+        <div class="btn-row">
+          <button type="button" id="refreshDebugBtn">Refresh Debug</button>
+          <button type="button" id="clearStorageBtn" class="danger">Clear Saved Data</button>
+        </div>
+        <p class="small">
+          <b>Warning:</b> Clearing saved data removes all custom activities from this browser.
+          Built-in defaults will reload next time the page is opened.
+        </p>
+      </details>
+    </div>
+  </div>
+
+  <footer>
+    Downtime & Dating Helper — all data stays in your browser.
+  </footer>
+</div>
+
+<script>
+(function() {
+  const STORAGE_KEY = "downtimeActivities_v2";
+  const SORT_KEY = "downtimeActivities_sortMode";
+
+  const DEFAULT_ACTIVITIES = [
+    /* Example: Craft Item */
+    {
+      name: "Example: Craft Item",
+      category: "Crafting",
+      dc: 15,
+      ability: "Int (smith's tools) or other relevant tool",
+      successText: "You make solid, meaningful progress toward the item. Reduce remaining time or cost according to your crafting rules.",
+      failureText: "Your efforts stall. You waste the day on missteps or minor flaws and make little visible progress.",
+      critSuccessText: "You have a breakthrough. Progress is well ahead of schedule or the item\u2019s quality exceeds your expectations.",
+      critFailureText: "Something goes wrong at the workbench. You lose materials, damage the project, or suffer a minor mishap at the GM\u2019s discretion.",
+      tier0Text: "Disaster: the work goes catastrophically wrong. Materials are ruined or the project is set back dramatically.",
+      tier1Text: "Failure: you accomplish almost nothing and may create a small problem, such as wasted materials or extra repairs.",
+      tier2Text: "Bad Success: you move the project forward, but create flaws, waste resources, or build in a future complication.",
+      tier3Text: "Standard Success: consistent, reliable progress that keeps the project on schedule.",
+      tier4Text: "Success Plus: strong progress plus a small bonus such as saved time, extra durability, or a minor embellishment.",
+      tier5Text: "Critical Success: exceptional progress and a notable upgrade, discount, or signature flourish for the finished piece."
+    },
+    /* Example: Gather Information */
+    {
+      name: "Example: Gather Information",
+      category: "Social",
+      dc: 13,
+      ability: "Cha (Persuasion) or Wis (Insight)",
+      successText: "You track down a useful, reliable piece of information about your target topic.",
+      failureText: "You spend the day chasing unreliable rumours or people who refuse to talk. No solid leads.",
+      critSuccessText: "You uncover a valuable secret, precise lead, or hidden angle that others have missed.",
+      critFailureText: "You are misled or draw the wrong eyes. You gain bad intel, make enemies, or attract unwelcome attention.",
+      tier0Text: "Critical Failure: your questions alert hostile forces or powerful interests; you may be fed lies on purpose.",
+      tier1Text: "Failure: you get nothing useful and risk annoying the locals or earning a minor reputation as a busybody.",
+      tier2Text: "Bad Success: you get some truth tangled with dangerous rumours or half-truths that could mislead you.",
+      tier3Text: "Standard Success: you secure a dependable rumour, answer, or name that points you in the right direction.",
+      tier4Text: "Success Plus: you gain multiple worthwhile leads or a helpful contact willing to share more later.",
+      tier5Text: "Critical Success: you map out the situation thoroughly, gaining deep insight, several leads, and a useful ally."
+    },
+    /* Carousing */
+    {
+      name: "Carousing",
+      category: "Social",
+      dc: 15,
+      ability: "Cha (Persuasion or Performance)",
+      successText: "You blend into the local scene, make a good impression, and pick up at least one useful rumour along with a friendly contact tied to this district or social tier.",
+      failureText: "You burn time and coin on drinks, gossip, and distractions, but gain no trustworthy information or lasting contacts.",
+      critSuccessText: "You become the talk of the night for all the right reasons. You gain multiple valuable rumours, a strong contact willing to vouch for you, and advantage on your next social check with this crowd.",
+      critFailureText: "A drunken misstep offends the wrong person or crosses a local taboo. You gain a hostile contact, lose a modest amount of gear or coin, and your reputation suffers here.",
+      tier0Text: "The night collapses into chaos. You insult or cross someone powerful, lose or break an important resource, and gain a notable enemy or legal trouble in this area.",
+      tier1Text: "You fail to make helpful connections. You leave with a hangover, a lighter purse, and at least one minor complication.",
+      tier2Text: "You pick up a rumour or weak contact, but also gain a serious complication\u2014a rival takes notice, a deal is made on shaky terms, or you owe a favour you\u2019d rather not owe.",
+      tier3Text: "You gather a solid rumour and secure a friendly contact who can provide future introductions or information among this social tier.",
+      tier4Text: "You gain a strong contact, multiple useful rumours, and a hint about an upcoming opportunity, plot, or threat that others have only started to whisper about.",
+      tier5Text: "You become an instant fixture of the local nightlife. You gain several reliable contacts, excellent rumours, and a standing invitation to exclusive gatherings that can open doors later."
+    },
+    /* Healing & Medical Work */
+    {
+      name: "Healing & Medical Work",
+      category: "Support",
+      dc: 15,
+      ability: "Wis (Medicine) or Int (Medicine)",
+      successText: "Your treatments go smoothly. You stabilize or improve several patients, gaining goodwill and a modest payment, favour, or access to medical supplies.",
+      failureText: "Your day is exhausting and yields little improvement. Patients remain in rough shape, and your reputation as a healer doesn\u2019t notably change.",
+      critSuccessText: "You pull off impressive recoveries or solve a tricky case. Word of your skill spreads; you gain significant favour, a grateful contact, and possibly a bonus payment or rare medicinal component.",
+      critFailureText: "A serious misdiagnosis or mishap harms a patient or delays their recovery. Relatives, clergy, or local officials take offense, and your standing as a healer takes a hit.",
+      tier0Text: "A patient dies or suffers permanent harm under your care. You may be blamed by family or authorities, lose access to a clinic or temple, and gain a serious enemy or legal threat.",
+      tier1Text: "Your efforts backfire or do nothing. Patients worsen, rumours of your poor work spread, and you may owe compensation or face complaints.",
+      tier2Text: "You help some patients, but a major complication arises\u2014a botched treatment, angry relative, or dangerous infection that follows you out of the sickroom.",
+      tier3Text: "You competently treat patients, earn modest payment or gratitude, and establish yourself as a reliable healer in this community.",
+      tier4Text: "Your work stands out. You earn above-average compensation, a favour from a grateful family, and clear improvement in local attitudes toward you.",
+      tier5Text: "You achieve a remarkable recovery or cure a difficult case. You gain strong reputation as a miracle worker, a powerful ally or patron, and access to better facilities or resources."
+    },
+    /* Hunting & Gathering */
+    {
+      name: "Hunting & Gathering",
+      category: "Exploration",
+      dc: 13,
+      ability: "Wis (Survival) or Dex (Stealth)",
+      successText: "You track, hunt, and forage effectively. You return with a good haul of food, herbs, or trophies worth a respectable amount of coin or trade.",
+      failureText: "The wilderness does not cooperate. Tracks go cold, prey slips away, and the plants you find are too sparse or risky to harvest.",
+      critSuccessText: "You find rich ground or bring down impressive game. You return with a large haul of valuable supplies, trophies, or rare materials.",
+      critFailureText: "The outing goes badly wrong. You become lost, injured, or cross a dangerous creature\u2019s territory, returning with little to show for the risk.",
+      tier0Text: "A major wilderness disaster\u2014ambush, storm, or deadly terrain\u2014costs you resources, injures allies, or damages gear. You bring back nothing useful.",
+      tier1Text: "You return with empty packs and at least one complication: a hostile creature now knows your scent, you angered local hunters, or you took a minor injury.",
+      tier2Text: "You gather some useful supplies, but at a heavy cost such as damaged equipment, accidental trespass, or attracting the attention of a dangerous predator.",
+      tier3Text: "You come back with a solid haul of food, herbs, or trophies suitable for resupplying the party or making moderate profit in town.",
+      tier4Text: "You find especially fruitful grounds or rare materials, gaining above-average value plus a clue about nearby lairs, ruins, or natural features.",
+      tier5Text: "You return loaded with valuable game, rare components, or prized trophies, and you also discover a hidden landmark, lair, or route that offers strong future advantage."
+    },
+    /* Religious Services */
+    {
+      name: "Religious Services",
+      category: "Religious",
+      dc: 15,
+      ability: "Int (Religion) or Cha (Performance)",
+      successText: "You assist the temple or shrine with rituals, counselling, and duties. The clergy are pleased, and you earn modest favour, blessings, or small material support.",
+      failureText: "You fulfil your tasks without distinction. The work is done, but you neither stand out nor gain notable favour or reward.",
+      critSuccessText: "Your devotion and skill shine. You impress the faithful and leadership, gaining a strong contact, a notable blessing, or a promise of future aid from the temple.",
+      critFailureText: "You commit a social or ritual blunder that upsets clergy or worshippers. Your standing with this faith suffers, and the temple is reluctant to trust you again.",
+      tier0Text: "A grave error marks you as untrustworthy. You may be barred from the site or required to make restitution.",
+      tier1Text: "You mishandle minor duties or cause small offense. Gossip among worshippers harms your reputation, and you are given little responsibility.",
+      tier2Text: "Your service technically succeeds, but triggers a thorny complication, such as religious rivalry, demanding petitioners, or political attention focused on you.",
+      tier3Text: "You perform your duties respectfully and competently, gaining a modest blessing, token of thanks, or the goodwill of the local clergy.",
+      tier4Text: "You earn the trust of a ranking priest or respected elder, gain a meaningful blessing or favour, and pick up a rumour or clue tied to the faith\u2019s concerns.",
+      tier5Text: "You are seen as a chosen helper of the faith. You gain a powerful ally in the clergy, strong blessings or access to temple resources, and insider knowledge of coming omens or threats."
+    },
+    /* Research & Investigation */
+    {
+      name: "Research & Investigation",
+      category: "Investigation",
+      dc: 16,
+      ability: "Int (Investigation) or Int (History/Arcana)",
+      successText: "Hours of careful study pay off. You uncover a useful piece of lore or a clear answer to one of your questions about the subject at hand.",
+      failureText: "Your notes lead in circles. You find conflicting or irrelevant information and make no solid progress on your primary question.",
+      critSuccessText: "You piece together obscure sources into a striking insight. You gain a strong, actionable revelation, plus extra context that sharply clarifies the situation.",
+      critFailureText: "You misread or misinterpret your sources. You walk away believing something dangerously wrong, or you draw the attention of someone who does not want these questions asked.",
+      tier0Text: "Your research goes disastrously astray. You embrace a false conclusion, destroy or lose key notes, or alert hostile forces to your investigation.",
+      tier1Text: "You make no real progress and waste time and resources. At best you confirm what you already knew; at worst, you chase misleading whispers.",
+      tier2Text: "You gain partial truth tangled with dangerous misconceptions or half-answers that could mislead you if not double-checked.",
+      tier3Text: "You assemble reliable lore, answering a key question or revealing a solid rumour or lead related to your topic.",
+      tier4Text: "You uncover several strong leads, extra rumours, or side-threads\u2014names, places, or rituals\u2014that point toward future adventures or solutions.",
+      tier5Text: "You unlock a deep, rare piece of knowledge few others possess, gain multiple precise leads, and perhaps identify a hidden weakness, route, or secret tied to your research target."
+    },
+
+    /* --- Romance Mini-Game Actions --- */
+
+    {
+      name: "Date: Greeting & Small Talk",
+      category: "Romance",
+      dc: 10,
+      ability: "Cha (Charisma check) + current Opinion",
+      successText: "You open with the right tone. The NPC relaxes and responds warmly. Increase the Opinion score by +1.",
+      failureText: "Your opening is awkward, off-key, or too stiff. The NPC pulls back a little. Decrease the Opinion score by \u22121.",
+      critSuccessText: "You say exactly what they needed to hear, reading their mood perfectly. Increase the Opinion score by +2.",
+      critFailureText: "You step hard on a social landmine or badly misread them. Increase tension and decrease Opinion by \u22122.",
+      tier0Text: "The greeting goes disastrously: you offend, embarrass, or alarm them, starting the date on a very sour note.",
+      tier1Text: "The conversation stumbles, leaving an uncomfortable silence or visible awkwardness between you.",
+      tier2Text: "You manage to connect, but with obvious friction or missteps the NPC will remember.",
+      tier3Text: "A decent start: pleasant enough that they\u2019re willing to give the rest of the date a chance.",
+      tier4Text: "You hit a charming stride quickly; they\u2019re clearly pleased and curious to see where the evening goes.",
+      tier5Text: "You make a wonderful first impression. They\u2019re genuinely excited to spend more time with you."
+    },
+    {
+      name: "Date: Compliment or Gift",
+      category: "Romance",
+      dc: 10,
+      ability: "Cha (Persuasion) + current Opinion",
+      successText: "Your compliment or gift lands well and feels sincere. Increase the Opinion score by +1.",
+      failureText: "It comes across as forced, mismatched, or insincere. Decrease the Opinion score by \u22121.",
+      critSuccessText: "You offer something that feels deeply personal and perfectly chosen. Increase the Opinion score by +2.",
+      critFailureText: "Your gesture backfires badly, reminding them of something painful or a sore insecurity. Decrease Opinion by \u22122.",
+      tier0Text: "The gift or compliment is a disaster, reopening wounds or confirming their worst suspicions about you.",
+      tier1Text: "They smile politely but are clearly uncomfortable or unimpressed by the gesture.",
+      tier2Text: "They appreciate the thought, but there\u2019s an edge of awkwardness, obligation, or misunderstanding.",
+      tier3Text: "They genuinely like it; it becomes a nice moment that helps the date along.",
+      tier4Text: "They are delighted and a little flustered, treating this as a highlight of the evening.",
+      tier5Text: "The gesture feels perfect and meaningful; it becomes a treasured memory and strong positive mark in your favour."
+    },
+    {
+      name: "Date: Shared Activity",
+      category: "Romance",
+      dc: 10,
+      ability: "Relevant skill (Performance, Athletics, etc.) + current Opinion",
+      successText: "You handle the activity smoothly and match their energy. Increase the Opinion score by +1.",
+      failureText: "You trip up, misjudge the pace, or make things less fun. Decrease the Opinion score by \u22121.",
+      critSuccessText: "You shine during the activity, drawing laughter, admiration, or a moment of genuine connection. Increase Opinion by +2.",
+      critFailureText: "The activity goes memorably wrong\u2014injury, embarrassment, or obvious frustration. Decrease Opinion by \u22122.",
+      tier0Text: "The shared activity is a fiasco that you\u2019ll both remember for the wrong reasons.",
+      tier1Text: "It feels flat or strained, highlighting differences in taste or comfort.",
+      tier2Text: "You have fun, but a clumsy mistake or awkward exchange leaves a mark.",
+      tier3Text: "The activity is pleasant and enjoyable, giving you both something to talk about later.",
+      tier4Text: "You click well during the activity and create a shared in-joke, success, or memory.",
+      tier5Text: "The activity becomes a standout moment of chemistry and compatibility between you."
+    },
+    {
+      name: "Date: Deeper Conversation",
+      category: "Romance",
+      dc: 10,
+      ability: "Wis (Insight) + current Opinion",
+      successText: "You read them well and respond thoughtfully. Increase the Opinion score by +1.",
+      failureText: "You misjudge topics, over-share, or miss emotional cues. Decrease the Opinion score by \u22121.",
+      critSuccessText: "You find honest common ground and share a vulnerable or meaningful moment. Increase Opinion by +2.",
+      critFailureText: "You press too hard, say something hurtful, or reopen old wounds. Decrease Opinion by \u22122.",
+      tier0Text: "The conversation causes real hurt or mistrust, making it hard for them to relax around you.",
+      tier1Text: "Attempts at deeper talk feel forced or mismatched, creating tension rather than closeness.",
+      tier2Text: "You touch on meaningful topics, but clumsy phrasing or timing blunts the effect.",
+      tier3Text: "You trade some honest thoughts and stories, building a baseline of understanding.",
+      tier4Text: "You learn something important about each other, making future interactions easier to navigate.",
+      tier5Text: "You share a powerful, intimate conversation that strongly deepens emotional connection."
+    },
+    {
+      name: "Date: Closing Remarks",
+      category: "Romance",
+      dc: 10,
+      ability: "Cha (Charisma check) + current Opinion",
+      successText: "You close the evening with confidence and warmth. Increase the Opinion score by +1.",
+      failureText: "Your ending is clumsy, abrupt, or leaves things unclear. Decrease the Opinion score by \u22121.",
+      critSuccessText: "You sum up the night in a way that feels heartfelt and well-timed. Increase Opinion by +2.",
+      critFailureText: "You say something unfortunate right at the end, souring the memory of the date. Decrease Opinion by \u22122.",
+      tier0Text: "The parting words undo much of the night\u2019s goodwill, leaving them frustrated or upset.",
+      tier1Text: "The closing feels awkward, with unsaid things hanging heavily in the air.",
+      tier2Text: "You wrap up the evening, but an off-key remark or misread tone keeps it from feeling satisfying.",
+      tier3Text: "A decent goodbye: polite, friendly, and leaving room for future meetings.",
+      tier4Text: "You end on a charming note that reinforces the best parts of the date.",
+      tier5Text: "The closing feels perfect, leaving them eager for the next chance to see you again."
+    },
+    {
+      name: "Date: Parting Gesture",
+      category: "Romance",
+      dc: 10,
+      ability: "Cha (Persuasion) + current Opinion",
+      successText: "Your final gesture matches their comfort level and hopes. Increase the Opinion score by +1.",
+      failureText: "You push too far or hold back at the wrong moment. Decrease the Opinion score by \u22121.",
+      critSuccessText: "You choose a parting gesture that feels natural, safe, and exciting. Increase Opinion by +2.",
+      critFailureText: "Your gesture is badly timed or inappropriate, creating discomfort or embarrassment. Decrease Opinion by \u22122.",
+      tier0Text: "The parting gesture crosses a serious line or feels deeply wrong to them.",
+      tier1Text: "They recoil slightly or withdraw, signalling that this was not what they wanted.",
+      tier2Text: "They accept the gesture but with visible hesitation or mixed feelings.",
+      tier3Text: "A simple, pleasant goodbye that they can look back on without regret.",
+      tier4Text: "A warm parting that clearly signals mutual interest in future meetings.",
+      tier5Text: "The perfect goodbye for this relationship\u2019s stage, cementing strong mutual interest."
+    },
+    {
+      name: "Date: Overall Outcome (5-Roll Challenge)",
+      category: "Romance",
+      dc: 10,
+      ability: "Varies; use main social bonus + current Opinion",
+      successText: "Treat the number of successes as the final band for how the date went. Adjust the Opinion stat accordingly.",
+      failureText: "Even if this overall check feels rough, use the tiers to decide where the NPC\u2019s feelings land by the end.",
+      critSuccessText: "",
+      critFailureText: "",
+      tier0Text: "0 successes \u2014 Date went very poorly. Treat Opinion as firmly in the \u22123 to \u22125 band: they are upset, hurt, or strongly put off.",
+      tier1Text: "1 success \u2014 Date was awkward. Treat Opinion as roughly \u22121 to \u22122: some interest may remain, but the memory is uncomfortable.",
+      tier2Text: "2 successes \u2014 Date went okay. Treat Opinion as around 0 to +1: not terrible, not amazing, but salvageable.",
+      tier3Text: "3 successes \u2014 NPC had a good time. Treat Opinion as +2 to +3: they are genuinely positive and open to seeing you again.",
+      tier4Text: "4 successes \u2014 Very good time. Treat Opinion toward the top of +3, heading into +4: they are clearly interested and impressed.",
+      tier5Text: "5 successes \u2014 NPC is very interested. Treat Opinion as +4 to +5: they feel a strong pull toward you and look forward to future dates."
+    },
+
+    /* --- Practical Downtime Actions (10) --- */
+
+    {
+      name: "Training & Skill Practice",
+      category: "Training",
+      dc: 12,
+      ability: "Int or Wis (any trained skill/tool relevant to the training)",
+      successText: "You put in focused, quality practice and make clear progress toward your next milestone.",
+      failureText: "Your practice is scattered, distracted, or poorly structured. You tread water without meaningful improvement.",
+      critSuccessText: "You have a breakthrough moment where techniques click into place, granting extra progress and insight.",
+      critFailureText: "You drill bad habits, overexert yourself, or hit a frustrating wall that sets your progress back.",
+      tier0Text: "Your training day backfires. You pick up bad habits or strain, setting progress back and possibly imposing disadvantage until fixed in play.",
+      tier1Text: "The session feels unfocused. You gain little to no progress and may become frustrated with this training avenue.",
+      tier2Text: "You do improve, but unevenly. Some concepts stick while others become muddled, creating a quirk or flaw.",
+      tier3Text: "You make steady, reliable progress. Mark one solid step toward learning the skill, language, tool, or maneuver.",
+      tier4Text: "You exceed expectations, gaining a strong training day plus a useful trick or mnemonic for future checks.",
+      tier5Text: "The session is exemplary. You leap forward in mastery, potentially finishing a training clock early or gaining a signature flourish."
+    },
+    {
+      name: "Spell / Ritual Research",
+      category: "Magic",
+      dc: 16,
+      ability: "Int (Arcana / Religion / Nature), depending on tradition",
+      successText: "You refine theory, cross-reference sources, and stabilize at least one element of the spell or ritual you\u2019re chasing.",
+      failureText: "Your experiments and reading go in circles. You make no reliable progress toward a usable formula.",
+      critSuccessText: "You decode a key secret or pattern, securing a robust, reliable version of the effect or a powerful variant.",
+      critFailureText: "Your research backfires or pulls you into dangerous magical territory, causing a mishap or attracting attention.",
+      tier0Text: "A miscalculation triggers a serious magical mishap\u2014unleashed energy, whispers, or a partial summoning with consequences.",
+      tier1Text: "The day yields false leads or contradictions. Rare components are wasted or contacts exhausted.",
+      tier2Text: "You uncover partial truth entangled with risky procedures. You could attempt a flawed version with notable dangers.",
+      tier3Text: "You secure a functional, basic version of the spell/ritual or mark solid progress toward it.",
+      tier4Text: "You refine the spell and uncover a safer casting method, side usage, or minor related effect.",
+      tier5Text: "You create a high-quality, stable version of the effect with a special benefit such as reduced cost or faster casting."
+    },
+    {
+      name: "Equipment Maintenance & Upgrades",
+      category: "Crafting",
+      dc: 12,
+      ability: "Str or Int (smith\u2019s, leatherworker\u2019s, tinker\u2019s tools, etc.)",
+      successText: "You clean, repair, and tune the equipment. It\u2019s battle-ready and slightly more reliable than before.",
+      failureText: "Your work is rushed or unfocused. You barely keep the gear functional, with no notable improvement.",
+      critSuccessText: "You perfect the adjustments. The item handles beautifully, granting a temporary or story-driven edge.",
+      critFailureText: "You over-tighten, crack, or mis-align something. The gear is damaged or develops a dangerous quirk.",
+      tier0Text: "Your attempts seriously damage or destabilize an item, imposing penalties or requiring major repairs.",
+      tier1Text: "The work stalls and you waste time and materials. Minor flaws persist and squeaks, rattles, or misalignments remain.",
+      tier2Text: "You improve some aspects while harming others, creating a drawback or quirk that can matter later.",
+      tier3Text: "The equipment is in good working order. You feel confident relying on it in upcoming encounters.",
+      tier4Text: "The gear feels tuned to its wielder, justifying a small situational bonus for a key roll.",
+      tier5Text: "You achieve a master-level tune-up or customization, granting a notable temporary benefit or story tag."
+    },
+    {
+      name: "Networking & Politics (Schmoozing)",
+      category: "Politics",
+      dc: 14,
+      ability: "Cha (Persuasion / Deception) or Wis (Insight)",
+      successText: "You work the room effectively, reading power currents and making at least one useful political contact.",
+      failureText: "Your attempts to mingle fall flat. You neither offend nor impress, and gain little leverage.",
+      critSuccessText: "You impress key figures and navigate all the right conversations, securing a powerful ally or favour.",
+      critFailureText: "You misjudge the politics badly, irritating someone important or stepping into a factional dispute.",
+      tier0Text: "You become a cautionary tale. A powerful figure is now hostile, or a faction blames you for a scandal.",
+      tier1Text: "You get entangled in petty feuds and owe minor favours, gaining a reputation as a nuisance.",
+      tier2Text: "You build connections at a price\u2014uncomfortable obligations or promises you may regret later.",
+      tier3Text: "You secure a steady contact and a clearer view of the current political landscape.",
+      tier4Text: "You cultivate multiple promising ties and learn about emerging alliances or rivalries.",
+      tier5Text: "You are seen as a serious player, gaining a strong patron or coalition and advancing your agenda significantly."
+    },
+    {
+      name: "Domain / Business Management",
+      category: "Economic",
+      dc: 15,
+      ability: "Int (Investigation) or Wis (Insight), with relevant tools",
+      successText: "You balance the books, allocate labour well, and keep the operation running smoothly with reasonable profit.",
+      failureText: "Costs creep up or inefficiencies go unchecked. The enterprise treads water or loses ground.",
+      critSuccessText: "You identify key improvements or opportunities, boosting profits, loyalty, and reputation.",
+      critFailureText: "You miss warning signs or make bad calls, causing serious losses, scandal, or unrest.",
+      tier0Text: "A major setback hits your holdings\u2014fire, theft, revolt, or an inspection gone wrong.",
+      tier1Text: "The books look grim. You lose money, staff complain, or a rival exploits your mismanagement.",
+      tier2Text: "You keep the business alive at a cost: strained resources, debts, or obligations to questionable lenders.",
+      tier3Text: "Profits and stability are acceptable; the enterprise holds steady as a dependable base.",
+      tier4Text: "You post a strong period with extra profit, cemented loyalty, or discovered new markets.",
+      tier5Text: "It\u2019s a banner day. Significant profit, strong reputation gains, and new contracts or expansions open up."
+    },
+    {
+      name: "Scouting & Patrolling",
+      category: "Exploration",
+      dc: 14,
+      ability: "Wis (Perception / Survival) or Dex (Stealth)",
+      successText: "You map the area, spot threats early, and keep routes relatively safe for now.",
+      failureText: "Your patrol turns up little of value. Threats remain hidden and you gain limited new information.",
+      critSuccessText: "You identify key dangers, chokepoints, and safe paths, gaining strong tactical intel.",
+      critFailureText: "Your patrol blunders into trouble, leading to ambush, misdirection, or being tracked.",
+      tier0Text: "A serious ambush, trap, or hazard hits your patrol, injuring you or exposing your movements.",
+      tier1Text: "You miss important signs. The region remains dangerous and hostile forces learn your patterns.",
+      tier2Text: "You uncover threats at a painful cost: wounds, lost gear, or increased enemy alertness.",
+      tier3Text: "You secure basic routes and mark hazards, granting a modest edge navigating the area.",
+      tier4Text: "You identify hidden paths, ambush sites, or lairs that can be exploited later.",
+      tier5Text: "You gain a near-complete understanding of terrain and threat patterns, granting strong advantages later."
+    },
+    {
+      name: "Crime / Heist Prep / Underworld Deals",
+      category: "Crime",
+      dc: 15,
+      ability: "Dex (Stealth / Sleight of Hand), Int (Investigation), or Cha (Deception)",
+      successText: "You line up a decent score or secure shady contacts without drawing too much attention.",
+      failureText: "Your schemes stall. Prospects dry up or meetings fall through with little to show.",
+      critSuccessText: "You land a lucrative opportunity or airtight plan with reliable underworld allies.",
+      critFailureText: "You draw the wrong kind of attention\u2014guards, rival gangs, or a powerful fixer.",
+      tier0Text: "The job goes bad before it begins. You\u2019re exposed, wanted, or in heavy debt to criminals.",
+      tier1Text: "You stir the waters without payoff, prompting rumours among criminals or law enforcement.",
+      tier2Text: "You gain a chance at profit but with harsh strings attached: extra risk, betrayal potential, or ruthless partners.",
+      tier3Text: "You piece together a solid job or secure trustworthy black-market connections.",
+      tier4Text: "You find a lucrative score with good intel and a useful new contact in the underworld.",
+      tier5Text: "You orchestrate a major opportunity with high reward, strong support, and multiple escape routes."
+    },
+    {
+      name: "Performance & Art",
+      category: "Social",
+      dc: 13,
+      ability: "Cha (Performance) or Dex/Int (relevant artisan tools)",
+      successText: "Your performance or artwork resonates. You earn decent pay, praise, or a small following.",
+      failureText: "The crowd is lukewarm or distracted. You gain little money or recognition.",
+      critSuccessText: "You deliver something memorable, gaining a dedicated fan, patron, or notable reputation boost.",
+      critFailureText: "Your work is badly received or ill-timed, leaving you mocked or ignored.",
+      tier0Text: "Your show is a public disaster. You suffer serious embarrassment and may gain a vocal critic.",
+      tier1Text: "The audience shrugs; you collect few coins and hear unkind muttering.",
+      tier2Text: "You create something promising but flawed, drawing mixed reactions and perhaps a complicated patron.",
+      tier3Text: "You entertain well, earning fair pay and a positive local reputation.",
+      tier4Text: "The performance stands out, granting extra money, a new fan, or invitation to a better venue.",
+      tier5Text: "You leave a lasting impression. Strong patronage, regional reputation, or a signature piece results."
+    },
+    {
+      name: "Magical Experimentation / Item Tuning",
+      category: "Magic",
+      dc: 17,
+      ability: "Int (Arcana) plus relevant tools or focus",
+      successText: "You safely probe the magic involved, learning how it behaves and how to push it without breaking it.",
+      failureText: "Your tests are inconclusive or too cautious. You learn little you can rely on in the field.",
+      critSuccessText: "You unlock a hidden mode, synergy, or safe channel for the magic, gaining a clear new benefit.",
+      critFailureText: "Your meddling destabilizes the magic. Wild energy, curses, or extraplanar attention lash out.",
+      tier0Text: "A severe magical backlash erupts, causing wild surges, corruption, or an awakened entity.",
+      tier1Text: "Your tests misfire, wasting resources and creating minor but inconvenient magical side-effects.",
+      tier2Text: "You discover partial truths that tempt risky applications. The magic can do more\u2014but not safely.",
+      tier3Text: "You gain a solid understanding of basic functions, strengths, and limits.",
+      tier4Text: "You identify safe optimizations and combinations that grant small but meaningful advantages.",
+      tier5Text: "You achieve a deep grasp of the effect, unlocking a potent new application or unique signature behavior."
+    },
+    {
+      name: "Rumour Seeding & Propaganda",
+      category: "Social",
+      dc: 14,
+      ability: "Cha (Deception) or Int (Investigation)",
+      successText: "You craft and spread a believable narrative. Public conversation bends slightly toward your version.",
+      failureText: "Your rumours fail to stick or compete with stronger stories. Little changes in public mood.",
+      critSuccessText: "Your message spreads quickly and convincingly. Many accept it as the likely truth.",
+      critFailureText: "Your manipulation is exposed or obviously slanted. You lose trust and face backlash.",
+      tier0Text: "Your campaign backfires badly. Targets rally against you, your lies are revealed, and credibility plummets.",
+      tier1Text: "The seeds don\u2019t take root. At best you waste effort; at worst, people grow suspicious of you.",
+      tier2Text: "Your story circulates but distorted, causing collateral damage or unexpected trouble.",
+      tier3Text: "You shift opinions modestly in your favour, with people repeating your talking points.",
+      tier4Text: "Your narrative spreads widely and begins crowding out competing stories.",
+      tier5Text: "Your propaganda becomes accepted common wisdom; institutions and the public act on your version."
+    },
+
+    /* --- Big Ritual / Ceremony / Weird Actions (10) --- */
+
+    {
+      name: "Consecrate or Profane a Site",
+      category: "Ritual / Religious",
+      dc: 17,
+      ability: "Wis (Religion) or Cha (Performance) with holy/unholy focus",
+      successText: "The site takes on a subtle aura of your chosen power. Aligned creatures gain small benefits; opposed forces feel uneasy.",
+      failureText: "The ritual sputters. Incense, offerings, or components are consumed with no lasting shift.",
+      critSuccessText: "The site becomes a true sanctuary or blighted ground. You gain a lasting boon or safe haven here, and future rites of this type gain advantage.",
+      critFailureText: "Something else answers. A rival power, spirit, or ward twists the rite, aligning the ground to an unintended force.",
+      tier0Text: "The site violently rejects the rite; relics crack, visions lash out, and a hostile entity or omen marks you as intruders.",
+      tier1Text: "You leave behind muddled energies, making the place spiritually noisy; minor hauntings or odd dreams may follow.",
+      tier2Text: "The site bends slightly toward your goal but only at certain times, for certain people, or with a risky side-effect.",
+      tier3Text: "A stable consecration/profanation takes hold. Creatures tied to that power feel it immediately.",
+      tier4Text: "The site becomes a minor locus; related magic is easier here and you gain a specific ongoing benefit.",
+      tier5Text: "You create a recognized holy/unholy landmark that draws pilgrims or cultists and offers a powerful once-per-arc boon when invoked."
+    },
+    {
+      name: "Ancestral Vision Quest",
+      category: "Spiritual / Mystical",
+      dc: 16,
+      ability: "Wis (Insight) or Con (save vs strain)",
+      successText: "You witness clear symbolic scenes from the past and gain a usable clue, warning, or technique.",
+      failureText: "Your visions are fragmented and contradictory, offering eerie but unusable imagery.",
+      critSuccessText: "An ancestor walks with you. You gain a strong secret, clear tactical advantage, or temporary unusual ability.",
+      critFailureText: "You are overwhelmed by another\u2019s memories, suffering disorientation, nightmares, or intrusive fragments.",
+      tier0Text: "Your mind is flooded. You emerge shaken, haunted by voices or phantom sensations that complicate mental or social checks.",
+      tier1Text: "You glimpse something important but cannot separate it from fear or guilt, leaving a dangerous half-truth.",
+      tier2Text: "You gain a mix of truth and distortion, enough to guide you but with a built-in trap if taken at face value.",
+      tier3Text: "A coherent vision reveals relevant scenes, names, or locations tied to current problems.",
+      tier4Text: "You see several pivotal moments, gaining context on motivations, hidden factions, or deeper stakes.",
+      tier5Text: "You experience a guided tour of your lineage\u2019s memories, leaving with precise prophecy, a potent secret, and a strong emotional anchor."
+    },
+    {
+      name: "Forge a Blood Oath",
+      category: "Oaths & Contracts",
+      dc: 18,
+      ability: "Cha (Persuasion) to negotiate + Int (Arcana) or Wis (Religion) to bind",
+      successText: "The oath takes hold. Breaking its terms invites meaningful narrative consequences or magical backlash.",
+      failureText: "The ritual fails; everyone walks away unconvinced or suspicious, and no binding is formed.",
+      critSuccessText: "The pact is elegant and resilient with few loopholes, and you gain a modest boon while acting in accordance with it.",
+      critFailureText: "The binding is warped; an unseen entity or clause twists the terms subtly against you.",
+      tier0Text: "The oath backfires. A hostile force gains leverage, binding the wrong clauses and empowering your enemies.",
+      tier1Text: "The pact forms but is badly lopsided, heavily favouring one side while exploiting the other.",
+      tier2Text: "The oath mostly works but with a glaring loophole or hidden cost that will matter later.",
+      tier3Text: "A fair, functional pact takes hold with clear benefits and risks for all signers.",
+      tier4Text: "The oath strengthens alliances and morale, granting advantage on key social checks when invoking its terms.",
+      tier5Text: "The blood oath becomes legendary, echoing in prophecy and unlocking powerful cooperative boons."
+    },
+    {
+      name: "Conduct a Seasonal Rite or Festival",
+      category: "Social / Religious",
+      dc: 14,
+      ability: "Cha (Performance) or Wis (Religion)",
+      successText: "The rite is well-received. Spirits are appeased, morale improves, and tensions ease.",
+      failureText: "The event feels flat or poorly timed; morale is unchanged or slightly worsened.",
+      critSuccessText: "The festival becomes a cornerstone memory. You gain broad goodwill and small mechanical boons like help, discounts, or blessings.",
+      critFailureText: "An omen, mishap, or public embarrassment taints the rite, spawning superstition or unrest.",
+      tier0Text: "The rite is seen as a bad sign: omens, crops, or weather turn, and trust in you plummets.",
+      tier1Text: "The event is awkward or divisive; factions bicker and rumours spread of mismanagement.",
+      tier2Text: "The festival mostly works, but a serious complication erupts\u2014brawl, theft, scandal, or manifestation.",
+      tier3Text: "People have a good time; spirits/forces are satisfied, and you gain modest goodwill.",
+      tier4Text: "The rite heals old wounds or solidifies alliances, granting a strong contact or support base.",
+      tier5Text: "The event is mythic, altering local tradition or creating a holiday in your name and marking you as steward of this place."
+    },
+    {
+      name: "Weave a Protective Ward Network",
+      category: "Magic / Defense",
+      dc: 17,
+      ability: "Int (Arcana) or Wis (Insight) + tools/components",
+      successText: "You establish a functional ward network that alerts you to intrusions or mildly hinders attackers.",
+      failureText: "The pattern is flawed or incomplete; the wards are unreliable and may fail under stress.",
+      critSuccessText: "The wards are elegant and resilient; attackers face meaningful penalties and you gain strong intel.",
+      critFailureText: "The warding matrix shorts or turns partially hostile, triggering at the wrong times or on allies.",
+      tier0Text: "The network collapses spectacularly, destroying components and leaving a visible magical scar.",
+      tier1Text: "A patchy lattice forms\u2014some runes work, others fail; intruders may slip through or trigger false alarms.",
+      tier2Text: "The wards function but with quirks, occasionally ignoring threats or striking friendlies.",
+      tier3Text: "A robust defence covers main approaches; intruders will be detected or slowed meaningfully.",
+      tier4Text: "The network is cleverly layered, offering alternate responses and safe routes for allies.",
+      tier5Text: "You create a signature warding system recognized as your work, granting strong defensive advantages and quick retuning in future downtime."
+    },
+    {
+      name: "Bind or Elevate a Familiar / Spirit Ally",
+      category: "Magic / Companions",
+      dc: 15,
+      ability: "Cha (Animal Handling / Persuasion) + Int (Arcana) or Wis (Religion)",
+      successText: "The bond strengthens. The familiar gains a small new trick, sense, or narrative perk.",
+      failureText: "The ritual fizzles; the bond remains unchanged and the spirit may feel slightly neglected.",
+      critSuccessText: "The familiar evolves, gaining a notable new ability, form, or personality shift tied to your magic.",
+      critFailureText: "The spirit is hurt or offended, withdrawing or attracting the notice of rival entities.",
+      tier0Text: "The bond fractures; the familiar may depart, be taken, or become an independent complication.",
+      tier1Text: "The spirit remains but trust erodes. It becomes temperamental or sets conditions on its service.",
+      tier2Text: "The bond grows with a side effect\u2014odd cravings, mutation, or obligations to the spirit\u2019s realm.",
+      tier3Text: "A healthy strengthening of the connection grants a modest shared boon.",
+      tier4Text: "The familiar becomes a powerful ally with distinct story-meaningful capabilities or contacts.",
+      tier5Text: "You and the spirit become almost inseparable, with fates entwined and potent joint abilities."
+    },
+    {
+      name: "Chronicle in a Living Grimoire or Echo Archive",
+      category: "Lore / Magic",
+      dc: 15,
+      ability: "Int (Arcana / History)",
+      successText: "You store memories, spell-structures, or lore cleanly, granting advantage on future checks to recall this topic.",
+      failureText: "The archive resists; entries are incomplete, distorted, or hard to retrieve.",
+      critSuccessText: "The archive understands the material, cross-linking it with older content and surfacing new hints.",
+      critFailureText: "The archive mutates the entry; future consultations may produce dangerously wrong recall.",
+      tier0Text: "The archive is corrupted by the attempt. Whole sections become unreliable or locked behind puzzles.",
+      tier1Text: "Your entry is half-lost or scrambled, forcing reconstruction from imperfect memory.",
+      tier2Text: "The information is stored but tangled with unrelated echoes, making access confusing.",
+      tier3Text: "A solid, searchable entry is added, making the archive a dependable reference.",
+      tier4Text: "The archive draws connections you missed, revealing surprising links and foreshadowing.",
+      tier5Text: "The archive gains new capabilities\u2014illusions, voices, predictive suggestions\u2014linked to your stored experiences."
+    },
+    {
+      name: "Craft a Rite-Bound Relic",
+      category: "Crafting / Relics",
+      dc: 18,
+      ability: "Int (Arcana) or Wis (Religion) + tools",
+      successText: "The relic takes form with a modest but distinct power tied to its story.",
+      failureText: "The materials do not harmonize; you end with a mundane or flawed item of limited significance.",
+      critSuccessText: "The relic awakens with strong, narrative-heavy abilities and a clear theme.",
+      critFailureText: "The relic is born twisted or cursed, its power bound to unintended consequences.",
+      tier0Text: "Ritual failure consumes materials and creates a cursed fragment or dangerous anomaly.",
+      tier1Text: "A weak, unstable relic emerges, working briefly but with obvious drawbacks.",
+      tier2Text: "You craft a functional but temperamental relic that works best under odd or narrow conditions.",
+      tier3Text: "The relic is solid and dependable, offering one or two clear benefits that fit its story.",
+      tier4Text: "The relic gains layered abilities or evolves as milestones are met.",
+      tier5Text: "You forge a future legend; the relic can change NPC reactions, trigger visions, or anchor later quests."
+    },
+    {
+      name: "Invoke a Long-Form Battlefield Rite",
+      category: "War / Teamwork",
+      dc: 16,
+      ability: "Cha (Performance) or Int (tactical skill)",
+      successText: "The group internalizes the rite. In the next major battle, they gain a situational advantage.",
+      failureText: "The routine doesn\u2019t stick; in battle, no one recalls it clearly enough to use.",
+      critSuccessText: "The rite becomes a signature tactic, granting a strong themed advantage in the next key fight.",
+      critFailureText: "Overcomplicated drills sow confusion; the next big battle risks miscommunication or panic.",
+      tier0Text: "Training harms cohesion. In the next big conflict, a mis-timed move drastically complicates things.",
+      tier1Text: "The rite is clumsy; some remember, some forget, making its use risky and uneven.",
+      tier2Text: "The idea is good but under-practiced, granting a small edge with a chance of backfiring.",
+      tier3Text: "A solid battlefield rite grants a consistent benefit such as initiative, positioning, or morale.",
+      tier4Text: "The team internalizes several variants, allowing flexible application.",
+      tier5Text: "The rite becomes mythic, inspiring allies and intimidating foes when invoked."
+    },
+    {
+      name: "Open a Controlled Astral / Dream Conclave",
+      category: "Magic / Social / Espionage",
+      dc: 18,
+      ability: "Int (Arcana) or Wis (Insight) with appropriate focus",
+      successText: "You create a stable shared mental space where participants can talk and visualize plans safely.",
+      failureText: "The connection is weak or fragmented; communication is fuzzy and details blur on waking.",
+      critSuccessText: "The conclave is crystal-clear; you can test symbolic plans and peek at emotional truths.",
+      critFailureText: "A foreign presence slips in or the space destabilizes, exposing minds to intrusion or stolen secrets.",
+      tier0Text: "The conclave shatters. Participants wake with headaches, missing memories, or implanted images from an intruder.",
+      tier1Text: "The space is noisy and leaky; secrets spill and someone eavesdrops unnoticed.",
+      tier2Text: "You meet, but the realm is unstable; fears and desires bleed into planning, colouring decisions.",
+      tier3Text: "A workable dream-chamber forms, allowing decent coordination and rehearsal.",
+      tier4Text: "The conclave runs smoothly, revealing nonverbal cues, hidden doubts, and refined plans.",
+      tier5Text: "You create a reusable astral war room or sanctuary, revisitable in future downtime with growing power."
+    }
+  ];
+
+  let activities = [];
+  let sortMode = "name";
+
+  const els = {
+    activityList: document.getElementById("activityList"),
+    sortModeSelect: document.getElementById("sortModeSelect"),
+    newActivityBtn: document.getElementById("newActivityBtn"),
+    deleteActivityBtn: document.getElementById("deleteActivityBtn"),
+    restoreDefaultsBtn: document.getElementById("restoreDefaultsBtn"),
+    activityForm: document.getElementById("activityForm"),
+    activityId: document.getElementById("activityId"),
+    activityName: document.getElementById("activityName"),
+    activityCategory: document.getElementById("activityCategory"),
+    activityDC: document.getElementById("activityDC"),
+    activityAbility: document.getElementById("activityAbility"),
+    activitySuccess: document.getElementById("activitySuccess"),
+    activityFailure: document.getElementById("activityFailure"),
+    activityCritSuccess: document.getElementById("activityCritSuccess"),
+    activityCritFailure: document.getElementById("activityCritFailure"),
+    activityTier0: document.getElementById("activityTier0"),
+    activityTier1: document.getElementById("activityTier1"),
+    activityTier2: document.getElementById("activityTier2"),
+    activityTier3: document.getElementById("activityTier3"),
+    activityTier4: document.getElementById("activityTier4"),
+    activityTier5: document.getElementById("activityTier5"),
+    activitySelect: document.getElementById("activitySelect"),
+    useFivePoint: document.getElementById("useFivePoint"),
+    rollModeRadios: document.querySelectorAll('input[name="rollMode"]'),
+    rollButton: document.getElementById("rollButton"),
+    outcomeDisplay: document.getElementById("outcomeDisplay"),
+    characterName: document.getElementById("characterName"),
+    characterBonus: document.getElementById("characterBonus"),
+    jsonArea: document.getElementById("jsonArea"),
+    exportBtn: document.getElementById("exportBtn"),
+    importBtn: document.getElementById("importBtn"),
+    debugInfo: document.getElementById("debugInfo"),
+    refreshDebugBtn: document.getElementById("refreshDebugBtn"),
+    clearStorageBtn: document.getElementById("clearStorageBtn")
+  };
+
+  function uuid() {
+    return "a" + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+  }
+
+  function normalizeActivity(a) {
+    return {
+      id: a.id || uuid(),
+      name: a.name || "Unnamed Activity",
+      category: a.category || "",
+      dc: (typeof a.dc === "number" && !isNaN(a.dc)) ? a.dc : null,
+      ability: a.ability || "",
+      successText: a.successText || "",
+      failureText: a.failureText || "",
+      critSuccessText: a.critSuccessText || "",
+      critFailureText: a.critFailureText || "",
+      tier0Text: a.tier0Text || "",
+      tier1Text: a.tier1Text || "",
+      tier2Text: a.tier2Text || "",
+      tier3Text: a.tier3Text || "",
+      tier4Text: a.tier4Text || "",
+      tier5Text: a.tier5Text || "",
+      createdAt: (typeof a.createdAt === "number" && !isNaN(a.createdAt)) ? a.createdAt : Date.now()
+    };
+  }
+
+  function loadActivities() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        activities = DEFAULT_ACTIVITIES.map(normalizeActivity);
+        saveActivities();
+      } else {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          activities = parsed.map(normalizeActivity);
+        } else {
+          activities = DEFAULT_ACTIVITIES.map(normalizeActivity);
+          saveActivities();
+        }
+      }
+    } catch (e) {
+      console.error("Failed to load activities:", e);
+      activities = DEFAULT_ACTIVITIES.map(normalizeActivity);
+      saveActivities();
+    }
+  }
+
+  function saveActivities() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(activities));
+    } catch (e) {
+      console.error("Failed to save activities:", e);
+    }
+    updateDebugPanel();
+  }
+
+  function loadSortMode() {
+    try {
+      const raw = localStorage.getItem(SORT_KEY);
+      if (raw) sortMode = raw;
+      els.sortModeSelect.value = sortMode;
+    } catch (e) {
+      console.error("Failed to load sort mode:", e);
+    }
+  }
+
+  function saveSortMode() {
+    try {
+      localStorage.setItem(SORT_KEY, sortMode);
+    } catch (e) {
+      console.error("Failed to save sort mode:", e);
+    }
+  }
+
+  function updateDebugPanel() {
+    const info = els.debugInfo;
+    if (!info) return;
+
+    let storedCount = "n/a";
+    let storedBytes = 0;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        storedBytes = raw.length;
+        const parsed = JSON.parse(raw);
+        storedCount = Array.isArray(parsed) ? parsed.length : "non-array";
+      } else {
+        storedCount = 0;
+      }
+    } catch (e) {
+      storedCount = "error";
+    }
+
+    info.textContent =
+      "Activities in memory: " + activities.length +
+      " | Saved in localStorage: " + storedCount +
+      " | Sort mode: " + sortMode +
+      " | JSON size: " + storedBytes + " chars";
+  }
+
+  function getSortedActivities() {
+    const arr = activities.slice();
+    if (sortMode === "name") {
+      arr.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
+    } else if (sortMode === "category") {
+      arr.sort((a, b) => {
+        const ac = (a.category || "").toLowerCase();
+        const bc = (b.category || "").toLowerCase();
+        if (ac && !bc) return -1;
+        if (!ac && bc) return 1;
+        const catCompare = ac.localeCompare(bc);
+        if (catCompare !== 0) return catCompare;
+        return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
+      });
+    } else if (sortMode === "created") {
+      arr.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    }
+    return arr;
+  }
+
+  function getCurrentSelectedId() {
+    const formId = els.activityId.value.trim();
+    if (formId) return formId;
+    const selVal = els.activitySelect.value;
+    if (selVal) return selVal;
+    return null;
+  }
+
+  function renderActivityList(selectedId) {
+    const ul = els.activityList;
+    ul.innerHTML = "";
+    const sorted = getSortedActivities();
+
+    sorted.forEach(activity => {
+      const li = document.createElement("li");
+      li.dataset.id = activity.id;
+      if (activity.id === selectedId) li.classList.add("active");
+
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "name";
+      nameSpan.textContent = activity.name;
+
+      const rightSpan = document.createElement("span");
+      if (activity.category) {
+        const cat = document.createElement("span");
+        cat.className = "category";
+        cat.textContent = activity.category;
+        rightSpan.appendChild(cat);
+      }
+      if (activity.dc != null) {
+        const pill = document.createElement("span");
+        pill.className = "pill";
+        pill.textContent = "DC " + activity.dc;
+        rightSpan.appendChild(pill);
+      }
+
+      li.appendChild(nameSpan);
+      li.appendChild(rightSpan);
+      li.addEventListener("click", () => {
+        selectActivity(activity.id);
+      });
+
+      ul.appendChild(li);
+    });
+
+    if (activities.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "No activities yet. Click “New” to add one.";
+      li.style.opacity = "0.7";
+      ul.appendChild(li);
+    }
+  }
+
+  function renderActivitySelect(selectedId) {
+    const sel = els.activitySelect;
+    sel.innerHTML = "";
+    const sorted = getSortedActivities();
+
+    if (sorted.length === 0) {
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "No activities defined";
+      sel.appendChild(opt);
+      sel.disabled = true;
+      els.rollButton.disabled = true;
+    } else {
+      sel.disabled = false;
+      els.rollButton.disabled = false;
+      sorted.forEach(activity => {
+        const opt = document.createElement("option");
+        opt.value = activity.id;
+        opt.textContent = activity.name;
+        sel.appendChild(opt);
+      });
+      if (selectedId) {
+        sel.value = selectedId;
+      }
+      if (!sel.value && sel.options.length > 0) {
+        sel.selectedIndex = 0;
+      }
+    }
+  }
+
+  function clearForm() {
+    els.activityId.value = "";
+    els.activityName.value = "";
+    els.activityCategory.value = "";
+    els.activityDC.value = "";
+    els.activityAbility.value = "";
+    els.activitySuccess.value = "";
+    els.activityFailure.value = "";
+    els.activityCritSuccess.value = "";
+    els.activityCritFailure.value = "";
+    els.activityTier0.value = "";
+    els.activityTier1.value = "";
+    els.activityTier2.value = "";
+    els.activityTier3.value = "";
+    els.activityTier4.value = "";
+    els.activityTier5.value = "";
+    els.deleteActivityBtn.disabled = true;
+  }
+
+  function fillForm(activity) {
+    els.activityId.value = activity.id;
+    els.activityName.value = activity.name;
+    els.activityCategory.value = activity.category || "";
+    els.activityDC.value = activity.dc != null ? String(activity.dc) : "";
+    els.activityAbility.value = activity.ability || "";
+    els.activitySuccess.value = activity.successText || "";
+    els.activityFailure.value = activity.failureText || "";
+    els.activityCritSuccess.value = activity.critSuccessText || "";
+    els.activityCritFailure.value = activity.critFailureText || "";
+    els.activityTier0.value = activity.tier0Text || "";
+    els.activityTier1.value = activity.tier1Text || "";
+    els.activityTier2.value = activity.tier2Text || "";
+    els.activityTier3.value = activity.tier3Text || "";
+    els.activityTier4.value = activity.tier4Text || "";
+    els.activityTier5.value = activity.tier5Text || "";
+    els.deleteActivityBtn.disabled = false;
+  }
+
+  function selectActivity(id) {
+    const activity = activities.find(a => a.id === id);
+    if (!activity) {
+      clearForm();
+      renderActivityList(null);
+      renderActivitySelect(null);
+      return;
+    }
+    fillForm(activity);
+    renderActivityList(id);
+    renderActivitySelect(id);
+  }
+
+  function handleSaveActivity(evt) {
+    evt.preventDefault();
+    const id = els.activityId.value.trim();
+    const name = els.activityName.value.trim() || "Unnamed Activity";
+    const category = els.activityCategory.value.trim();
+    const dcRaw = els.activityDC.value.trim();
+    const dc = dcRaw === "" ? null : Number(dcRaw);
+    const ability = els.activityAbility.value.trim();
+    const successText = els.activitySuccess.value.trim();
+    const failureText = els.activityFailure.value.trim();
+    const critSuccessText = els.activityCritSuccess.value.trim();
+    const critFailureText = els.activityCritFailure.value.trim();
+    const tier0Text = els.activityTier0.value.trim();
+    const tier1Text = els.activityTier1.value.trim();
+    const tier2Text = els.activityTier2.value.trim();
+    const tier3Text = els.activityTier3.value.trim();
+    const tier4Text = els.activityTier4.value.trim();
+    const tier5Text = els.activityTier5.value.trim();
+
+    const base = {
+      id: id || uuid(),
+      name,
+      category,
+      dc: (dcRaw === "" || isNaN(dc)) ? null : dc,
+      ability,
+      successText,
+      failureText,
+      critSuccessText,
+      critFailureText,
+      tier0Text,
+      tier1Text,
+      tier2Text,
+      tier3Text,
+      tier4Text,
+      tier5Text
+    };
+
+    if (id) {
+      const existing = activities.find(a => a.id === id);
+      if (existing) {
+        base.createdAt = existing.createdAt;
+      }
+    }
+
+    const obj = normalizeActivity(base);
+
+    if (id) {
+      const idx = activities.findIndex(a => a.id === id);
+      if (idx !== -1) {
+        activities[idx] = obj;
+      }
+    } else {
+      activities.push(obj);
+      els.activityId.value = obj.id;
+    }
+
+    saveActivities();
+    const finalId = els.activityId.value.trim();
+    renderActivityList(finalId);
+    renderActivitySelect(finalId);
+  }
+
+  function handleNewActivity() {
+    clearForm();
+    renderActivityList(null);
+  }
+
+  function handleDeleteActivity() {
+    const id = els.activityId.value.trim();
+    if (!id) return;
+    const activity = activities.find(a => a.id === id);
+    const name = activity ? activity.name : id;
+    if (!confirm('Delete activity "' + name + '"?')) return;
+    activities = activities.filter(a => a.id !== id);
+    saveActivities();
+    clearForm();
+    renderActivityList(null);
+    renderActivitySelect(null);
+  }
+
+  function handleRestoreDefaults() {
+    if (!confirm("Re-add any missing default activities? Existing entries will not be removed.")) return;
+    let added = 0;
+    DEFAULT_ACTIVITIES.forEach(def => {
+      const exists = activities.some(a => a.name.toLowerCase() === def.name.toLowerCase());
+      if (!exists) {
+        activities.push(normalizeActivity(def));
+        added++;
+      }
+    });
+    if (added > 0) {
+      saveActivities();
+    }
+    renderActivityList(getCurrentSelectedId());
+    renderActivitySelect(getCurrentSelectedId());
+    alert(added > 0 ? ("Restored " + added + " default activities.") : "All default activities are already present.");
+  }
+
+  function rollD20() {
+    return Math.floor(Math.random() * 20) + 1;
+  }
+
+  function getRollMode() {
+    let val = "normal";
+    els.rollModeRadios.forEach(r => {
+      if (r.checked) val = r.value;
+    });
+    return val;
+  }
+
+  function rollD20WithMode(mode) {
+    const r1 = rollD20();
+    if (mode === "normal") {
+      return { chosen: r1, rolls: [r1] };
+    }
+    const r2 = rollD20();
+    const chosen = (mode === "adv") ? Math.max(r1, r2) : Math.min(r1, r2);
+    return { chosen, rolls: [r1, r2] };
+  }
+
+  function handleRoll() {
+    const selectedId = els.activitySelect.value;
+    const activity = activities.find(a => a.id === selectedId);
+    if (!activity) return;
+
+    const useFive = els.useFivePoint.checked;
+    const charName = els.characterName.value.trim();
+    const bonusRaw = els.characterBonus.value.trim();
+    const bonus = bonusRaw === "" ? 0 : Number(bonusRaw) || 0;
+    const dc = activity.dc;
+    const mode = getRollMode();
+    const modeLabel = mode === "adv" ? "Advantage" : mode === "dis" ? "Disadvantage" : "Normal";
+
+    const outcomeEl = els.outcomeDisplay;
+    outcomeEl.innerHTML = "";
+
+    if (useFive && (dc == null || isNaN(dc))) {
+      const warn = document.createElement("div");
+      warn.className = "small";
+      warn.textContent = "This activity has no DC set; the 5-Roll Challenge needs a DC. Edit the activity to add a DC or uncheck the 5-Roll mode.";
+      outcomeEl.appendChild(warn);
+      return;
+    }
+
+    let degreeLabel = "";
+    let pillClass = "";
+    let outcomeText = "";
+    let rollInfoText = "";
+    const abilityInfoText = activity.ability ? "Check: " + activity.ability : "";
+
+    if (!useFive) {
+      const res = rollD20WithMode(mode);
+      const d20 = res.chosen;
+      const total = d20 + bonus;
+
+      const hasDC = dc != null && !isNaN(dc);
+      const isCritSuccess = d20 === 20;
+      const isCritFailure = d20 === 1;
+      let success = !hasDC || total >= dc;
+
+      const dcText = hasDC ? " vs. DC " + dc : "";
+      if (mode === "normal") {
+        rollInfoText = "Roll (Normal): " + d20 + (bonus ? " + " + bonus + " = " + total : "") + dcText;
+      } else {
+        rollInfoText = "Roll (" + modeLabel + "): " + d20 +
+          " (" + res.rolls[0] + ", " + res.rolls[1] + ")" +
+          (bonus ? " + " + bonus + " = " + total : "") + dcText;
+      }
+
+      if (hasDC) {
+        if (isCritSuccess && activity.critSuccessText) {
+          degreeLabel = "Critical Success";
+          outcomeText = activity.critSuccessText;
+        } else if (isCritFailure && activity.critFailureText) {
+          degreeLabel = "Critical Failure";
+          outcomeText = activity.critFailureText;
+        } else if (success) {
+          degreeLabel = "Success";
+          outcomeText = activity.successText || "You succeed.";
+        } else {
+          degreeLabel = "Failure";
+          outcomeText = activity.failureText || "You fail.";
+        }
+      } else {
+        if (isCritSuccess && activity.critSuccessText) {
+          degreeLabel = "Critical Success";
+          outcomeText = activity.critSuccessText;
+        } else if (isCritFailure && activity.critFailureText) {
+          degreeLabel = "Critical Failure";
+          outcomeText = activity.critFailureText;
+        } else {
+          degreeLabel = success ? "Success" : "Result";
+          outcomeText = success
+            ? (activity.successText || "You succeed.")
+            : (activity.failureText || "The outcome is mixed; interpret narratively.");
+        }
+      }
+
+      pillClass = degreeLabel.toLowerCase().includes("success")
+        ? "tag-success"
+        : degreeLabel.toLowerCase().includes("failure")
+        ? "tag-failure"
+        : "";
+    } else {
+      const results = [];
+      let successes = 0;
+      for (let i = 0; i < 5; i++) {
+        const res = rollD20WithMode(mode);
+        const d20 = res.chosen;
+        const total = d20 + bonus;
+        const success = total >= dc;
+        if (success) successes++;
+        results.push({ chosen: d20, rolls: res.rolls, total, success });
+      }
+
+      const chosenVals = results.map(r => r.chosen).join(", ");
+      const totals = results.map(r => r.total).join(", ");
+      rollInfoText = "Mode: " + modeLabel +
+        " | d20s (chosen): " + chosenVals +
+        (bonus ? " | totals(+ " + bonus + "): " + totals : "") +
+        " | successes: " + successes + "/5 vs. DC " + dc;
+
+      switch (successes) {
+        case 0:
+          degreeLabel = "Critical Failure (0/5)";
+          outcomeText = activity.tier0Text || activity.critFailureText || activity.failureText ||
+            "All five checks fail disastrously; a key resource, lead, or relationship is lost.";
+          pillClass = "tag-failure";
+          break;
+        case 1:
+          degreeLabel = "Failure (1/5)";
+          outcomeText = activity.tier1Text || activity.failureText ||
+            "You fail overall and should expect consequences.";
+          pillClass = "tag-failure";
+          break;
+        case 2:
+          degreeLabel = "Bad Success (2/5)";
+          outcomeText = activity.tier2Text || activity.failureText || activity.successText ||
+            "You succeed, but with a serious complication, cost, or new problem.";
+          pillClass = "tag-success";
+          break;
+        case 3:
+          degreeLabel = "Standard Success (3/5)";
+          outcomeText = activity.tier3Text || activity.successText ||
+            "You achieve a solid, expected success.";
+          pillClass = "tag-success";
+          break;
+        case 4:
+          degreeLabel = "Success Plus (4/5)";
+          outcomeText = activity.tier4Text || activity.successText || activity.critSuccessText ||
+            "You succeed with an extra boon, clue, or helpful side effect.";
+          pillClass = "tag-success";
+          break;
+        case 5:
+          degreeLabel = "Critical Success (5/5)";
+          outcomeText = activity.tier5Text || activity.critSuccessText || activity.successText ||
+            "You achieve an exceptional victory and gain significant extra benefits.";
+          pillClass = "tag-success";
+          break;
+        default:
+          degreeLabel = "Outcome";
+          outcomeText = activity.successText || "Mixed results; resolve narratively.";
+      }
+    }
+
+    const header = document.createElement("div");
+    header.className = "outcome-header";
+
+    const left = document.createElement("div");
+    left.textContent = (charName ? charName + " — " : "") + activity.name;
+
+    const right = document.createElement("div");
+    const tag = document.createElement("span");
+    tag.className = "pill";
+    if (pillClass) tag.classList.add(pillClass);
+    tag.textContent = degreeLabel || "Outcome";
+    right.appendChild(tag);
+
+    header.appendChild(left);
+    header.appendChild(right);
+
+    const rollInfo = document.createElement("div");
+    rollInfo.className = "small";
+    rollInfo.textContent = rollInfoText;
+
+    const abilityInfo = document.createElement("div");
+    abilityInfo.className = "small";
+    abilityInfo.style.marginBottom = "0.25rem";
+    if (abilityInfoText) abilityInfo.textContent = abilityInfoText;
+
+    const body = document.createElement("div");
+    body.textContent = outcomeText || "(No outcome text defined.)";
+
+    outcomeEl.appendChild(header);
+    if (rollInfoText) outcomeEl.appendChild(rollInfo);
+    if (abilityInfoText) outcomeEl.appendChild(abilityInfo);
+    outcomeEl.appendChild(body);
+  }
+
+  function handleExport() {
+    try {
+      const plain = activities.map(a => {
+        const { id, createdAt, ...rest } = a;
+        return rest;
+      });
+      els.jsonArea.value = JSON.stringify(plain, null, 2);
+      alert("Exported " + plain.length + " activities into the JSON box.");
+    } catch (e) {
+      console.error("Export failed:", e);
+      alert("Export failed: " + e.message);
+    }
+  }
+
+  function handleImport() {
+    const text = els.jsonArea.value.trim();
+    if (!text) {
+      alert("Paste some JSON into the box first.");
+      return;
+    }
+    try {
+      const parsed = JSON.parse(text);
+      if (!Array.isArray(parsed)) {
+        alert("Imported JSON must be an array of activity objects.");
+        return;
+      }
+      let added = 0;
+      parsed.forEach(obj => {
+        const norm = normalizeActivity(obj);
+        activities.push(norm);
+        added++;
+      });
+      if (added > 0) {
+        saveActivities();
+      }
+      const currentId = getCurrentSelectedId();
+      renderActivityList(currentId);
+      renderActivitySelect(currentId);
+      alert("Imported " + added + " activities.");
+    } catch (e) {
+      console.error("Import failed:", e);
+      alert("Import failed: " + e.message);
+    }
+  }
+
+  function init() {
+    loadActivities();
+    loadSortMode();
+    renderActivityList(null);
+    renderActivitySelect(null);
+
+    els.sortModeSelect.addEventListener("change", function() {
+      sortMode = this.value;
+      saveSortMode();
+      const id = getCurrentSelectedId();
+      renderActivityList(id);
+      renderActivitySelect(id);
+      updateDebugPanel();
+    });
+
+    els.newActivityBtn.addEventListener("click", handleNewActivity);
+    els.deleteActivityBtn.addEventListener("click", handleDeleteActivity);
+    els.restoreDefaultsBtn.addEventListener("click", handleRestoreDefaults);
+    els.activityForm.addEventListener("submit", handleSaveActivity);
+    els.rollButton.addEventListener("click", handleRoll);
+    els.exportBtn.addEventListener("click", handleExport);
+    els.importBtn.addEventListener("click", handleImport);
+
+    if (els.refreshDebugBtn) {
+      els.refreshDebugBtn.addEventListener("click", updateDebugPanel);
+    }
+    if (els.clearStorageBtn) {
+      els.clearStorageBtn.addEventListener("click", function() {
+        if (!confirm("This will remove ALL saved activities from this browser (custom + current defaults). Continue?")) {
+          return;
+        }
+        localStorage.removeItem(STORAGE_KEY);
+        updateDebugPanel();
+        alert("Saved data cleared. Reload the page to repopulate with default activities.");
+      });
+    }
+
+    updateDebugPanel();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
